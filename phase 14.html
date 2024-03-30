@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestion des Patients</title>
+<!-- Ajout de la bibliothèque jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<style>
+    body {
+        background-color: #8BC34A; /* Fond vert annie */
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    h1, h2 {
+        margin-top: 0;
+        padding-top: 20px;
+    }
+    #container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #FFF;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    select, input[type="text"], textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    select {
+        font-size: 16px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: #FFF;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    .highlighted {
+        background-color: #BBDEFB; /* Surligner en bleu */
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <h1>Gestion des Patients</h1>
+    <!-- Champ de texte pour inscrire le nom du patient -->
+    <label for="newPatient">Nom du patient :</label>
+    <input type="text" id="newPatient" placeholder="Entrez le nom du nouveau patient">
+    <button onclick="ajouterPatient()">Ajouter</button>
+    <br><br>
+    <!-- Liste déroulante des patients -->
+    <label for="patientsList">Sélectionnez un patient :</label>
+    <select id="patientsList">
+        <option value="">-- Sélectionnez --</option>
+        <!-- Les options seront ajoutées dynamiquement -->
+    </select>
+    <br><br>
+    <!-- Formulaire pour les informations du patient sélectionné -->
+    <div id="infoPatient" style="display:none;">
+        <h2>Informations du Patient</h2>
+        <form id="patientForm">
+            <label for="ta">TA :</label>
+            <input type="text" id="ta" name="ta" placeholder="Saisissez la TA du patient">
+            <label for="hgt">HGT :</label>
+            <input type="text" id="hgt" name="hgt" placeholder="Saisissez le HGT du patient">
+            <label for="temperature">Température :</label>
+            <input type="text" id="temperature" name="temperature" placeholder="Saisissez la température du patient">
+            <label for="observation">Observation :</label><br>
+            <textarea id="observation" name="observation" rows="4" placeholder="Saisissez les observations du patient"></textarea><br><br>
+            <input type="submit" value="Enregistrer">
+            <button type="button" onclick="modifierPatient()">Modifier</button>
+            <button type="button" onclick="supprimerPatient()">Supprimer</button>
+        </form>
+    </div>
+    <br>
+    <!-- Bouton pour extraire un résumé -->
+    <button onclick="extraireResume()">Extraire Résumé</button>
+</div>
+
+<script>
+    // Chargement initial des patients et de leurs informations
+    window.onload = function() {
+        chargerPatients();
+    };
+
+    // Fonction pour charger les patients depuis le stockage local
+    function chargerPatients() {
+        var patientsList = document.getElementById("patientsList");
+        patientsList.innerHTML = ""; // Réinitialisation de la liste déroulante
+        
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (key.endsWith("_ta")) { // On vérifie que la clé correspond à une information de patient
+                var patientName = key.split("_")[0];
+                var newOption = document.createElement("option");
+                newOption.text = patientName;
+                newOption.value = patientName;
+                patientsList.add(newOption);
+            }
+        }
+    }
+
+    // Fonction pour ajouter un patient à la liste déroulante
+    function ajouterPatient() {
+        var newPatientName = document.getElementById("newPatient").value;
+        if (newPatientName.trim() === "") {
+            alert("Veuillez entrer le nom du patient.");
+            return;
+        }
+        var patientsList = document.getElementById("patientsList");
+        var newOption = document.createElement("option");
+        newOption.text = newPatientName;
+        newOption.value = newPatientName;
+        patientsList.add(newOption);
+        document.getElementById("newPatient").value = ""; // Effacer le champ de saisie
+        
+        // Sauvegarder le nouveau patient dans le stockage local
+        sauvegarderPatient(newPatientName);
+    }
+
+    // Fonction pour remplir les champs du formulaire avec les données du patient sélectionné
+    function remplirFormulaire(patientName) {
+        document.getElementById("ta").value = localStorage.getItem(patientName + "_ta") || "";
+        document.getElementById("hgt").value = localStorage.getItem(patientName + "_hgt") || "";
+        document.getElementById("temperature").value = localStorage.getItem(patientName + "_temperature") || "";
+        document.getElementById("observation").value = localStorage.getItem(patientName + "_observation") || "";
+    }
+    
+    // Fonction pour afficher les informations du patient sélectionné
+    document.getElementById("patientsList").addEventListener("change", function() {
+        var selectedPatient = this.value;
+        var patientForm = document.getElementById("patientForm");
+        var infoPatient = document.getElementById("infoPatient");
+        
+        // Cache le formulaire d'info du patient si aucun patient n'est sélectionné
+        if (selectedPatient === "") {
+            infoPatient.style.display = "none";
+            return;
+echo "# as.missions.fr" >> README.md 
+git init 
+git add README.md 
+git commit -m "first commit" 
+git branch -M main 
+git remote add origin https://github.com/tessa971/as. missions.fr.git
+ git push -u origin main
